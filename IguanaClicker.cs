@@ -4,15 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class IguanaTyper : MonoBehaviour {
+public class IguanaClicker : MonoBehaviour {
     private const string INPUT_IGUANA = "iguana";
     public GameObject model;
     string[] arr = new string[6];
-    public int point = 0;
+    float point = 0;
     public Text text;
+    float AutoClickSpeed = 0;
+    float[] AutoClickeker = new float[10];
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 
     // Update is called once per frame
@@ -37,17 +39,24 @@ public class IguanaTyper : MonoBehaviour {
         
         if (str == INPUT_IGUANA){
             DropObject();
-            point += 10;
+            point += 10f;
             for (var i = 0; i < 6; i++) arr[i] = "";
-            text.text = point.ToString();
         }
 
         if (Input.GetMouseButtonDown(0))
         {
             DropObject();
             point++;
-            text.text = point.ToString();
         }
+
+        AutoClickSpeed = 0;
+        for (int i = 0; i < 10; i++)
+        {
+            AutoClickSpeed += (float)Math.Pow(10, i + 1) * AutoClickeker[i];
+        }
+
+        point += AutoClickSpeed * Time.deltaTime;
+        text.text = ((int)point).ToString() + "\tIguanas\n" + ((int)AutoClickSpeed).ToString() + "\tIpS"; //"IpS" means "Iguana per Second"
     }
 
     void DropObject()
@@ -60,5 +69,18 @@ public class IguanaTyper : MonoBehaviour {
         GameObject iguana = Instantiate(model) as GameObject;
         iguana.transform.position = new Vector3(x, 3, z);
         Destroy(iguana, 1f);
+    }
+
+    void OnGUI()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            float Payment = (float)Math.Pow(100, i + 1);
+            if (GUI.Button(new Rect(1000, 30 * i + 10, 200, 30), AutoClickeker[i] + "\tAutoClicker " + i.ToString()) && point >= Payment)
+            {
+                point -= Payment;
+                AutoClickeker[i] += 1;
+            }
+        }
     }
 }
