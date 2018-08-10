@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 
 public class IguanaTyper : MonoBehaviour {
+    private const string INPUT_IGUANA = "iguana";
     public GameObject model;
     string[] arr = new string[6];
     public int point = 0;
@@ -34,18 +35,18 @@ public class IguanaTyper : MonoBehaviour {
         string str = "";
         for (int i = 5; i >= 0; i--) str += arr[i];
         
-        if (str == "iguana"){
+        if (str == INPUT_IGUANA){
             DropObject();
             point += 10;
-            for (int i = 0; i < 6; i++) arr[i] = "";
-            text.text = point + "";
+            for (var i = 0; i < 6; i++) arr[i] = "";
+            text.text = point.ToString();
         }
 
         if (Input.GetMouseButtonDown(0))
         {
             DropObject();
             point++;
-            text.text = point + "";
+            text.text = point.ToString();
         }
     }
 
